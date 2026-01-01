@@ -1,0 +1,130 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Layout from '../components/layout/Layout.astro';
+
+type Props = CollectionEntry<'experiences'>['data'] & {
+  slug: string;
+};
+
+const { title, company, role, startDate, endDate, current, description, skills, logo } =
+  Astro.props;
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+  }).format(date);
+};
+
+const startFormatted = formatDate(startDate);
+const endFormatted = current ? 'Present' : endDate ? formatDate(endDate) : 'Present';
+
+// Calculate duration
+const calculateDuration = () => {
+  const end = current || !endDate ? new Date() : endDate;
+  const months = Math.round(
+    (end.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30)
+  );
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+
+  if (years === 0) {
+    return `${months} ${months === 1 ? 'month' : 'months'}`;
+  } else if (remainingMonths === 0) {
+    return `${years} ${years === 1 ? 'year' : 'years'}`;
+  } else {
+    return `${years} ${years === 1 ? 'year' : 'years'}, ${remainingMonths} ${remainingMonths === 1 ? 'month' : 'months'}`;
+  }
+};
+
+const duration = calculateDuration();
+---
+
+<Layout title={`${role} at ${company}`} description={description}>
+  <article class="container mx-auto px-6 py-12">
+    <div class="max-w-4xl mx-auto">
+      <!-- Header -->
+      <header class="mb-8 animate-fade-in">
+        <div class="flex items-start gap-4 mb-4">
+          {
+            logo && (
+              <img
+                src={logo}
+                alt={`${company} logo`}
+                class="w-16 h-16 object-cover"
+                style="border: 1px solid var(--color-border-subtle); border-radius: 4px;"
+              />
+            )
+          }
+          <div class="flex-grow">
+            <h1 class="font-mono text-3xl font-bold mb-2">{role}</h1>
+            <p class="font-mono text-xl mb-2" style="color: var(--color-accent);">
+              {company}
+            </p>
+            <div class="flex flex-wrap items-center gap-2 font-mono text-xs" style="color: var(--color-text-secondary);">
+              <time datetime={startDate.toISOString()}>
+                {startFormatted}
+              </time>
+              <span>-</span>
+              <time datetime={endDate?.toISOString() || new Date().toISOString()}>
+                {endFormatted}
+              </time>
+              <span>•</span>
+              <span>{duration}</span>
+              {
+                current && (
+                  <>
+                    <span>•</span>
+                    <span
+                      class="font-mono text-xs px-1.5 py-0.5"
+                      style="background-color: var(--color-accent); color: var(--color-bg-primary); border-radius: 2px;"
+                    >
+                      Current
+                    </span>
+                  </>
+                )
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Skills Used -->
+        {
+          skills.length > 0 && (
+            <div class="mt-6">
+              <h3 class="font-mono text-base font-semibold mb-3" style="color: var(--color-text-secondary);">
+                SKILLS & TECHNOLOGIES
+              </h3>
+              <div class="flex flex-wrap gap-1.5">
+                {skills.map((skill) => <span class="tag">{skill}</span>)}
+              </div>
+            </div>
+          )
+        }
+      </header>
+
+      <!-- Content -->
+      <div class="prose max-w-none animate-fade-in delay-1">
+        <slot />
+      </div>
+
+      <!-- Footer -->
+      <footer class="mt-8 pt-6 animate-fade-in delay-2" style="border-top: 1px solid var(--color-border-subtle);">
+        <a
+          href="/experience"
+          class="font-mono text-xs inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
+          style="color: var(--color-accent);"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Back to Experience
+        </a>
+      </footer>
+    </div>
+  </article>
+</Layout>

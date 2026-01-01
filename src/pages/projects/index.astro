@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../components/layout/Layout.astro';
+import ProjectCard from '../../components/cards/ProjectCard.astro';
+
+// Fetch all projects
+const allProjects = await getCollection('projects');
+const sortedProjects = allProjects.sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout
+  title="Projects"
+  description="A collection of projects showcasing my skills in software development, web applications, and innovative solutions."
+>
+  <div class="container section">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <header class="mb-12 animate-fade-in">
+        <h1 class="font-mono text-3xl font-bold mb-2">Projects</h1>
+        <p class="font-sans text-md text-secondary">
+          A showcase of my work in software development and innovative solutions
+        </p>
+      </header>
+
+      <!-- Projects Grid -->
+      {
+        sortedProjects.length > 0 ? (
+          <div class="grid grid-cols-1 gap-4">
+            {sortedProjects.map((project, index) => (
+              <div class={`animate-fade-in delay-${(index % 6) + 1}`}>
+                <ProjectCard
+                  title={project.data.title}
+                  description={project.data.description}
+                  technologies={project.data.technologies}
+                  github={project.data.github}
+                  demo={project.data.demo}
+                  slug={project.slug}
+                  image={project.data.image}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p class="font-sans text-base text-secondary text-center py-12">
+            No projects to display yet. Check back soon!
+          </p>
+        )
+      }
+    </div>
+  </div>
+</Layout>

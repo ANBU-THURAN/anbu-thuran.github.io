@@ -1,0 +1,136 @@
+---
+import Layout from '../components/layout/Layout.astro';
+---
+
+<Layout
+  title="About"
+  description="Learn more about my background, skills, and journey in software engineering."
+>
+  <div class="container section">
+    <div class="max-w-6xl mx-auto ml-5">
+      <!-- Header -->
+      <header class="mb-12 animate-fade-in">
+        <h1 class="font-mono text-3xl font-bold mb-2">About Me</h1>
+        <p class="font-sans text-md text-secondary">
+          My journey in software engineering and technology
+        </p>
+      </header>
+
+      <!-- Main Content -->
+      <div class="space-y-6">
+        <!-- Introduction -->
+        <section class="animate-fade-in delay-1">
+          <div class="card">
+            <h2 class="font-mono text-xl font-bold mb-3">Hello, I'm Anbu Thuran!</h2>
+            <div class="space-y-3">
+              <p class="font-sans text-base text-secondary leading-normal">
+                I’m a software engineer focused on building reliable backend systems and thoughtful, end-to-end products. My primary stack is Java and Spring Boot, with experience in React, and I’m actively expanding into TypeScript and Next.js.
+                I have also worked on RAG, Agentic AI Systems, designing structured, explainable agents and multi-agent workflows that can integrate in enterprise environments.
+                I write technical articles from time to time, and working on projects that prioritize fundamentals.
+              </p>
+              <p class="font-sans text-base text-secondary leading-normal">
+                My journey in technology began during my college years with a curiosity about how things work and evolved into
+                a career building software that impacts users worldwide. I believe in writing clean,
+                maintainable code.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Background & Education -->
+        <section class="animate-fade-in delay-3">
+          <h2 class="font-mono text-2xl font-bold mb-4">Background & Education</h2>
+          <div class="card">
+            <div class="mb-4">
+              <h3 class="font-mono text-lg font-bold mb-1">Bachelor of Engineering in Computer Science</h3>
+              <p class="font-mono text-base mb-1" style="color: var(--color-accent);">
+                Bannari Amman Institute of Technology - CGPA : 8.9 / 10
+              </p>
+              <p class="font-mono text-xs" style="color: var(--color-text-secondary);">2020 - 2024</p>
+            </div>
+            <p class="font-sans text-base" style="color: var(--color-text-secondary); line-height: 1.5;">
+              During my time at university, I developed a strong foundation in computer science
+              fundamentals including algorithms, data structures, operating systems, and software
+              engineering. I also participated in competitions and hackathons while working on projects.
+            </p>
+          </div>
+        </section>
+
+        <section class="animate-fade-in delay-2">
+          <h2 class="font-mono text-2xl font-bold mb-4">Interests & Values</h2>
+          <div class="grid md:grid-cols-2 gap-3">
+            <div class="card">
+              <h3 class="font-mono text-base font-bold mb-2" style="color: var(--color-accent);">
+                Problem Solving
+              </h3>
+              <p class="font-sans text-base" style="color: var(--color-text-secondary); line-height: 1.5;">
+                I have a strong love for solving problems, data structures and algorithms. I have solved over 500 problems on <a href="https://leetcode.com/u/tanbumails/">Leetcode</a>. Even during my college days, I have always participated in coding competitions.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="font-mono text-base font-bold mb-2" style="color: var(--color-accent);">
+                AI
+              </h3>
+              <p class="font-sans text-base" style="color: var(--color-text-secondary); line-height: 1.5;">
+                I like to stay up to date with emerging technologies and experiment with them hands-on.
+                Recently, I’ve been exploring Claude Code, building AI agents, skills, and structured workflows rather than simple prompt-based systems. I also build MCP servers using TypeScript and Spring AI, focusing on clean interfaces, composability, and real-world integration.
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="font-mono text-base font-bold mb-2" style="color: var(--color-accent);">
+                Writing
+              </h3>
+              <p class="font-sans text-base" style="color: var(--color-text-secondary); line-height: 1.5;">
+                I like to write technical articles from time to time when I find something interesting or something that's worth sharing and could be helpful for others. You can find my articles in my medium account: <a href="https://medium.com/@techtopics/">techtopics</a>
+              </p>
+            </div>
+            <div class="card">
+              <h3 class="font-mono text-base font-bold mb-2" style="color: var(--color-accent);">
+                Football & Chess
+              </h3>
+              <p class="font-sans text-base" style="color: var(--color-text-secondary); line-height: 1.5;">
+                I have been playing football regularly for over 10 years now and I also like to follow football matches and different leagues.
+                Chess has also been an interest of me for a while, I have a rating of 1680 on chess.com.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="animate-fade-in delay-5">
+          <h2 class="font-mono text-2xl font-bold mb-4">Let's Connect</h2>
+          <div class="card">
+            <p class="font-sans text-base mb-4" style="color: var(--color-text-secondary); line-height: 1.5;">
+              I'm always interested in new opportunities, collaborations, and conversations about
+              technology. Feel free to reach out!
+            </p>
+            <div class="flex flex-wrap gap-3">
+              <a
+                href="mailto:tanbumails@gmail.com"
+                class="btn"
+              >
+                Email Me
+              </a>
+              <a
+                href="https://github.com/ANBU-THURAN"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/anbu-thuran/"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</Layout>

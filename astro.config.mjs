@@ -7,9 +7,8 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://anbu-thuran.github.io',
+  site: 'https://anbu-thuran.github.io/portfolio/',
   output: 'static',
-  base: '/portfolio/',
   markdown: {
     shikiConfig: {
       themes: {

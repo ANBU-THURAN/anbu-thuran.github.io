@@ -9,7 +9,6 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   site: 'https://anbu-thuran.github.io',
   output: 'static',
-  base: '/portfolio/',
   markdown: {
     shikiConfig: {
       themes: {

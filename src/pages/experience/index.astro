@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../components/layout/Layout.astro';
+import ExperienceCard from '../../components/cards/ExperienceCard.astro';
+import { sortExperiences } from '../../utils/sortByDate';
+
+// Fetch all experiences
+const allExperiences = await getCollection('experiences');
+const sortedExperiences = sortExperiences(
+  allExperiences.map((e) => ({ ...e, ...e.data }))
+);
+---
+
+<Layout
+  title="Experience"
+  description="My professional journey in software engineering, showcasing roles, responsibilities, and achievements."
+>
+  <div class="container section">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header -->
+      <header class="mb-12 animate-fade-in">
+        <h1 class="font-mono text-3xl font-bold mb-2">Work Experience</h1>
+        <p class="font-sans text-md text-secondary">
+          My professional journey in software engineering and technology
+        </p>
+      </header>
+
+      <!-- Experience Timeline -->
+      {
+        sortedExperiences.length > 0 ? (
+          <div class="space-y-4">
+            {sortedExperiences.map((exp, index) => (
+              <div class={`animate-fade-in delay-${(index % 6) + 1}`}>
+                <ExperienceCard
+                  title={exp.data.title}
+                  company={exp.data.company}
+                  role={exp.data.role}
+                  startDate={exp.data.startDate}
+                  endDate={exp.data.endDate}
+                  current={exp.data.current}
+                  description={exp.data.description}
+                  slug={exp.slug}
+                  logo={exp.data.logo}
+                />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p class="font-sans text-base text-secondary text-center py-12">
+            No experience entries yet. Check back soon!
+          </p>
+        )
+      }
+    </div>
+  </div>
+</Layout>

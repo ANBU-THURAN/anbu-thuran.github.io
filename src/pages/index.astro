@@ -1,0 +1,228 @@
+---
+import {getCollection} from 'astro:content';
+import Layout from '../components/layout/Layout.astro';
+import BlogCard from '../components/cards/BlogCard.astro';
+import ProjectCard from '../components/cards/ProjectCard.astro';
+import ExperienceCard from '../components/cards/ExperienceCard.astro';
+import {calculateReadingTime} from '../utils/readingTime';
+import {sortByDate, sortExperiences} from '../utils/sortByDate';
+
+// Fetch all content
+const allBlogPosts = await getCollection('blog', ({data}) => !data.draft);
+const allProjects = await getCollection('projects');
+const allExperiences = await getCollection('experiences');
+
+// Sort and filter
+const recentBlogPosts = sortByDate(allBlogPosts, 'data.pubDate').slice(0, 3);
+const featuredProjects = allProjects
+    .filter((p) => p.data.featured)
+    .sort((a, b) => a.data.order - b.data.order)
+    .slice(0, 3);
+const displayProjects =
+    featuredProjects.length > 0 ? featuredProjects : allProjects.slice(0, 3);
+const recentExperiences = sortExperiences(
+    allExperiences.map((e) => ({...e, ...e.data}))
+).slice(0, 3);
+
+// Skills organized by category
+const skills = {
+    Backend: ['Java', 'Spring Boot', 'Node.js'],
+    Frontend: ['React', 'TypeScript', 'GWT', 'Tailwind CSS'],
+    Databases: ['PostgreSQL', 'Elastic Search'],
+    'Version Control': ['Git', 'Github'],
+    AI: ['Amazon Bedrock', 'Spring AI', 'Github Copilot CLI', 'Claude code', 'Langgraph4j'],
+};
+---
+
+<Layout
+        title="Home"
+        description="Personal portfolio showcasing projects, blog posts, and professional experience in software engineering."
+>
+    <!-- Hero Section -->
+    <section class="container section">
+        <div class="max-w-5xl ml-5 mx-auto">
+            <h1 class="font-mono text-2xl md:text-2xl font-bold mb-4 animate-fade-in">
+                Hi, I'm <span class="text-accent">Anbu Thuran</span>
+            </h1>
+            <p class="font-sans text-md md:text-lg text-secondary mb-6 animate-fade-in delay-1">
+                Software Engineer II focused on backend and AI systems, working on enterprise applications. I have experience with Java and Spring Boot–based services, as well as building agentic AI and RAG systems for production environments. You can read more about me in <a href="/about" style="text-decoration: underline;">About</a>
+                section. Connect with me here : <a
+                    href="https://linkedin.com/in/anbu-thuran"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1 font-mono text-sm text-accent hover:opacity-80 transition-opacity"
+                ><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</a> <a
+                    href="mailto:tanbumails@gmail.com"
+                    class="inline-flex items-center gap-1 font-mono text-sm text-accent hover:opacity-80 transition-opacity"
+                ><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>Email</a>
+            </p>
+            <div class="flex gap-3 animate-fade-in delay-2">
+                <a
+                        href="/blog"
+                        class="btn"
+                >
+                    Blogs
+                </a>
+                <a
+                        href="#projects"
+                        class="btn"
+                >
+                    Projects
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section bg-secondary">
+        <div class="container">
+            <div class="max-w-6xl mx-auto py-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="font-mono text-2xl font-bold">Projects</h2>
+                    <a
+                            href="/projects"
+                            class="font-mono text-md text-accent hover:opacity-80 transition-opacity"
+                    >
+                        View All →
+                    </a>
+                </div>
+
+                {
+                    displayProjects.length > 0 ? (
+                            <div class="grid grid-cols-1 gap-4">
+                                {displayProjects.map((project, index) => (
+                                        <div class={`animate-fade-in delay-${(index % 6) + 1}`}>
+                                            <ProjectCard
+                                                    title={project.data.title}
+                                                    description={project.data.description}
+                                                    technologies={project.data.technologies}
+                                                    github={project.data.github}
+                                                    demo={project.data.demo}
+                                                    slug={project.slug}
+                                                    image={project.data.image}
+                                            />
+                                        </div>
+                                ))}
+                            </div>
+                    ) : (
+                            <p class="font-sans text-base text-secondary text-center py-8">No projects yet. Check back
+                                soon!</p>
+                    )
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="container section">
+        <div class="container">
+            <div class="max-w-6xl mx-auto py-6">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="font-mono text-2xl font-bold">Experience</h2>
+                    <a
+                            href="/experience"
+                            class="font-mono text-md text-accent hover:opacity-80 transition-opacity"
+                    >
+                        View All →
+                    </a>
+                </div>
+
+                {
+                    recentExperiences.length > 0 ? (
+                            <div class="space-y-4">
+                                {recentExperiences.map((exp, index) => (
+                                        <div class={`animate-fade-in delay-${(index % 6) + 1}`}>
+                                            <ExperienceCard
+                                                    title={exp.data.title}
+                                                    company={exp.data.company}
+                                                    role={exp.data.role}
+                                                    startDate={exp.data.startDate}
+                                                    endDate={exp.data.endDate}
+                                                    current={exp.data.current}
+                                                    description={exp.data.description}
+                                                    slug={exp.slug}
+                                                    logo={exp.data.logo}
+                                            />
+                                        </div>
+                                ))}
+                            </div>
+                    ) : (
+                            <p class="font-sans text-base text-secondary text-center py-8">
+                                No experience entries yet. Check back soon!
+                            </p>
+                    )
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section bg-secondary">
+        <div class="container">
+            <div class="max-w-6xl mx-auto py-6">
+                <h2 class="font-mono text-2xl font-bold mb-8">Skills & Technologies</h2>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {
+                        Object.entries(skills).map(([category, items], categoryIndex) => (
+                                <div class={`card animate-fade-in delay-${(categoryIndex % 6) + 1}`}>
+                                    <h3 class="font-mono text-base font-bold text-accent mb-3">
+                                        {category}
+                                    </h3>
+                                    <div class="flex flex-wrap gap-1.5">
+                                        {items.map((skill) => (
+                                                <span class="tag">
+                      {skill}
+                    </span>
+                                        ))}
+                                    </div>
+                                </div>
+                        ))
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blog Posts Section -->
+    <section class="container section">
+        <div class="container">
+        <div class="max-w-6xl mx-auto py-6">
+            <div class="flex items-center justify-between mb-8">
+                <h2 class="font-mono text-2xl font-bold">Recent Blog Posts</h2>
+                <a
+                        href="/blog"
+                        class="font-mono text-md text-accent hover:opacity-80 transition-opacity"
+                >
+                    View All →
+                </a>
+            </div>
+
+            {
+                recentBlogPosts.length > 0 ? (
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {recentBlogPosts.map((post, index) => {
+                                const readingTime = calculateReadingTime(post.body);
+                                return (
+                                        <div class={`animate-fade-in delay-${(index % 6) + 1}`}>
+                                            <BlogCard
+                                                    title={post.data.title}
+                                                    description={post.data.description}
+                                                    pubDate={post.data.pubDate}
+                                                    tags={post.data.tags}
+                                                    slug={post.slug}
+                                                    readingTime={readingTime}
+                                            />
+                                        </div>
+                                );
+                            })}
+                        </div>
+                ) : (
+                        <p class="font-sans text-base text-secondary text-center py-8">No blog posts yet. Check back
+                            soon!</p>
+                )
+            }
+        </div>
+        </div>
+    </section>
+</Layout>

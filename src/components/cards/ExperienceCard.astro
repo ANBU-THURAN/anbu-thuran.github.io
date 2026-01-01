@@ -1,0 +1,72 @@
+---
+interface Props {
+  title: string;
+  company: string;
+  role: string;
+  startDate: Date;
+  endDate?: Date;
+  current: boolean;
+  description: string;
+  slug: string;
+  logo?: string;
+}
+
+const { title, company, role, startDate, endDate, current, description, slug, logo } = Astro.props;
+
+const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+  }).format(date);
+};
+
+const startFormatted = formatDate(startDate);
+const endFormatted = current ? 'Present' : endDate ? formatDate(endDate) : 'Present';
+---
+
+<article class="card">
+  <a href={`/experience/${slug}`} class="block group">
+    <div class="flex items-start gap-3 mb-2">
+      {logo && (
+        <img
+          src={logo}
+          alt={company}
+          class="w-10 h-10 border border-subtle rounded object-cover"
+        />
+      )}
+      <div class="flex-1 min-w-0">
+        <h3 class="font-mono text-lg font-semibold text-primary leading-snug group-hover:opacity-80 transition-opacity break-words">
+          {role}
+        </h3>
+        <p class="font-mono text-base text-secondary leading-snug truncate">
+          {company}
+        </p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 mb-2 flex-wrap">
+      <time
+        datetime={startDate.toISOString()}
+        class="font-mono text-base text-tertiary"
+      >
+        {startFormatted}
+      </time>
+      <span class="font-mono text-xs text-tertiary">-</span>
+      <time
+        datetime={endDate?.toISOString() || new Date().toISOString()}
+        class="font-mono text-base text-tertiary"
+      >
+        {endFormatted}
+      </time>
+      {current && (
+        <span class="font-mono border-2 text-xs px-1.5 py-0.5 text-secondary rounded">
+          Current
+        </span>
+      )}
+    </div>
+
+    <p class="font-sans text-md text-secondary leading-normal line-clamp-3">
+      {description}
+    </p>
+  </a>
+</article>

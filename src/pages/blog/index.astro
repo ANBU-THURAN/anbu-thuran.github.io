@@ -1,0 +1,106 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../components/layout/Layout.astro';
+import BlogCard from '../../components/cards/BlogCard.astro';
+import { calculateReadingTime } from '../../utils/readingTime';
+import { sortByDate } from '../../utils/sortByDate';
+
+// Fetch all non-draft blog posts
+const allBlogPosts = await getCollection('blog', ({ data }) => !data.draft);
+const sortedPosts = sortByDate(allBlogPosts, 'data.pubDate');
+
+// Extract all unique tags
+const allTags = [...new Set(allBlogPosts.flatMap((post) => post.data.tags))].sort();
+---
+
+<Layout
+  title="Blog"
+  description="Technical articles, tutorials, and thoughts on software engineering, web development, and technology."
+>
+  <div class="container section">
+    <div class="max-w-6xl mx-auto ml-5">
+      <!-- Header -->
+      <header class="mb-12 animate-fade-in">
+        <h1 class="font-mono text-3xl font-bold mb-2">Blog</h1>
+        <p class="font-sans text-md text-secondary">
+          Technical articles and thoughts on software engineering. You can find more of my articles in <a href="https://medium.com/@techtopics">Medium</a>
+        </p>
+      </header>
+
+      <!-- Tag Filter -->
+      {
+        allTags.length > 0 && (
+          <div class="mb-6 card animate-fade-in delay-1">
+            <h3 class="font-mono text-base font-semibold mb-3">Filter by Tag</h3>
+            <div class="flex flex-wrap gap-1.5">
+              {allTags.map((tag) => (
+                <a
+                  href={`?tag=${tag}`}
+                  class="tag"
+                >
+                  #{tag}
+                </a>
+              ))}
+              <a
+                href="/blog"
+                class="font-mono text-xs px-2 py-1 transition-opacity hover:opacity-80"
+                style="color: var(--color-text-secondary);"
+              >
+                Clear
+              </a>
+            </div>
+          </div>
+        )
+      }
+
+      <!-- Blog Posts Grid -->
+      {
+        sortedPosts.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {sortedPosts.map((post, index) => {
+              const readingTime = calculateReadingTime(post.body);
+              return (
+                <div
+                  class={`h-full animate-fade-in delay-${(index % 6) + 1}`}
+                  data-tags={post.data.tags.join(',')}
+                >
+                  <BlogCard
+                    title={post.data.title}
+                    description={post.data.description}
+                    pubDate={post.data.pubDate}
+                    tags={post.data.tags}
+                    slug={post.slug}
+                    readingTime={readingTime}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p class="font-sans text-base text-secondary text-center py-12">
+            No blog posts published yet. Check back soon!
+          </p>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- Client-side tag filtering script -->
+  <script>
+    // Client-side tag filtering - hide non-matching grid items
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedTag = urlParams.get('tag');
+
+    if (selectedTag) {
+      // Select wrapper divs (the actual grid children)
+      const wrappers = document.querySelectorAll('[data-tags]');
+
+      wrappers.forEach((wrapper) => {
+        const tags = wrapper.dataset.tags.split(',');
+        if (!tags.includes(selectedTag)) {
+          wrapper.style.display = 'none';  // Hide entire grid cell
+        }
+      });
+    }
+  </script>
+</Layout>

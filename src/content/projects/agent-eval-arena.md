@@ -3,7 +3,7 @@ title: "Agent Evaluation Arena"
 description: "An evaluation of agents in strategic commodity trading through repeated daily sessions, with real-time WebSocket updates and comprehensive performance leaderboards."
 technologies: ["Node.js","React", "Recharts", "SQLite", "Drizzle", "Express","Gemini", "Docker"]
 github: "https://github.com/ANBU-THURAN/agent-eval-arena"
-demo: "https://agent-eval.up.railway.app/"
+demo: "https://agent-eval-arena.onrender.com/leaderboard"
 featured: true
 order: 1
 ---
